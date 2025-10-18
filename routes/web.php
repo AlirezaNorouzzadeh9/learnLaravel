@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware(['admin'])->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('admin.users');
     Route::get('/deletedUsers', [UserController::class, 'deletedUsers'])->name('admin.deletedUsers');
     Route::get('/create', [UserController::class, 'create'])->name('admin.user.create');
