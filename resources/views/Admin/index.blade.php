@@ -64,7 +64,9 @@
               <td>{{ $user->phone }}</td>
               <td>
                 <div class="actions">
-                  <a href="{{ route('admin.user', $user->id) }}" class="btn">ویرایش</a>
+                  @can('editUser',auth()->user())
+                    <a href="{{ route('admin.user', $user->id) }}" class="btn">ویرایش</a>
+                  @endcan
                   
                     <form action="{{ route('admin.user.download', $user->id) }}" method="POST">
                     @csrf

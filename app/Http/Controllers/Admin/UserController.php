@@ -13,6 +13,7 @@ use App\Models\Role;
 use App\Models\UserInfo;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\mail;
 use Illuminate\Support\Facades\log;
@@ -26,11 +27,9 @@ class UserController extends Controller
     public function __construct()
     {
         $this->locale = session()->get('locale');
-        if($this->locale =='fa')
-        {
+        if ($this->locale == 'fa') {
             app()->setLocale('fa');
-        }
-        else{
+        } else {
             app()->setLocale('en');
         }
         log::info('information');
@@ -60,8 +59,12 @@ class UserController extends Controller
     }
     public function user(User $id)
     {
-        $user = $id;
-        return view('Admin.user', compact('user'));
+        if (Gate::authorize('editUser', $id)) {
+            $user = $id;
+            return view('Admin.user', compact('user'));
+        } else {
+            return redirect()->route('admin.user');
+        }
     }
 
     public function destroy($id)
